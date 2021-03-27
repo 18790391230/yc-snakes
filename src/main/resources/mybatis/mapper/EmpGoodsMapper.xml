@@ -19,9 +19,22 @@
     from yc_emp_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByGoodsId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from yc_emp_goods
+    where emp_id = #{empId,jdbcType=INTEGER}
+    and goods_id=#{goodsId,jdbcType=INTEGER}
+    and goods_status=1
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_emp_goods
     where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByGoodsId">
+
   </delete>
   <insert id="insert" parameterType="com.yc.snacks.domain.EmpGoods">
     insert into yc_emp_goods (id, order_id, emp_id, 
@@ -113,5 +126,8 @@
       goods_status = #{goodsStatus,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByGoodsId">
+
   </update>
 </mapper>

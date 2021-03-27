@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.yc.snacks.domain.Goods">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_type_id" jdbcType="INTEGER" property="goodsTypeId" />
-    <result column="link_id" jdbcType="INTEGER" property="linkId" />
+    <result column="link_id" jdbcType="VARCHAR" property="linkId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
     <result column="goods_desc" jdbcType="VARCHAR" property="goodsDesc" />
@@ -23,7 +23,13 @@
     from yc_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectByType" resultType="com.yc.snacks.domain.Goods">
+    select
+    <include refid="Base_Column_List"/>
+    from yc_goods
+    where goods_type_id = #{goodsType,jdbcType=INTEGER}
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_goods
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -32,7 +38,7 @@
       `name`, pic_url, goods_desc, 
       goods_price, cal_value, remark, 
       rank_no)
-    values (#{id,jdbcType=INTEGER}, #{goodsTypeId,jdbcType=INTEGER}, #{linkId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{goodsTypeId,jdbcType=INTEGER}, #{linkId,jdbcType=VARCHAR},
       #{name,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, #{goodsDesc,jdbcType=VARCHAR}, 
       #{goodsPrice,jdbcType=DECIMAL}, #{calValue,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{rankNo,jdbcType=INTEGER})
@@ -79,7 +85,7 @@
         #{goodsTypeId,jdbcType=INTEGER},
       </if>
       <if test="linkId != null">
-        #{linkId,jdbcType=INTEGER},
+        #{linkId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -111,7 +117,7 @@
         goods_type_id = #{goodsTypeId,jdbcType=INTEGER},
       </if>
       <if test="linkId != null">
-        link_id = #{linkId,jdbcType=INTEGER},
+        link_id = #{linkId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
@@ -140,7 +146,7 @@
   <update id="updateByPrimaryKey" parameterType="com.yc.snacks.domain.Goods">
     update yc_goods
     set goods_type_id = #{goodsTypeId,jdbcType=INTEGER},
-      link_id = #{linkId,jdbcType=INTEGER},
+      link_id = #{linkId,jdbcType=VARCHAR},
       `name` = #{name,jdbcType=VARCHAR},
       pic_url = #{picUrl,jdbcType=VARCHAR},
       goods_desc = #{goodsDesc,jdbcType=VARCHAR},

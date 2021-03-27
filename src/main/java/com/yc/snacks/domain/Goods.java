@@ -21,7 +21,7 @@ public class Goods implements Serializable {
     /**
      * 京东商品关联id
      */
-    private Integer linkId;
+    private String linkId;
 
     /**
      * 商品名称
@@ -76,11 +76,11 @@ public class Goods implements Serializable {
         this.goodsTypeId = goodsTypeId;
     }
 
-    public Integer getLinkId() {
+    public String getLinkId() {
         return linkId;
     }
 
-    public void setLinkId(Integer linkId) {
+    public void setLinkId(String linkId) {
         this.linkId = linkId;
     }
 

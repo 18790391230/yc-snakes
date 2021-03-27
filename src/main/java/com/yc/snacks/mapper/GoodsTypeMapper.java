@@ -1,5 +1,6 @@
 package com.yc.snacks.mapper;
 
+import com.yc.snacks.domain.Goods;
 import com.yc.snacks.domain.GoodsType;
 
 import java.util.List;
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface GoodsTypeMapper extends MyBatisBaseDao<GoodsType, Integer> {
     List<GoodsType> selectAll();
+
 }
