@@ -18,7 +18,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         if (empGoods != null) {
             if (empGoods.getGoodsNum() + count > 0) {
                 empGoods.setGoodsNum(empGoods.getGoodsNum() + count);
-                empGoodsMapper.updateByGoodsId(empId, goodsId);
+                empGoodsMapper.updateGoodsNum(empGoods);
             }else {
                 empGoodsMapper.deleteByGoodsId(empId, goodsId);
             }

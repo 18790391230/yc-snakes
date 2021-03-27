@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,5 +59,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateLoginStatus(int empId) {
         empGroupMapper.updateLoginStatus(empId);
+    }
+
+    @Override
+    public BigDecimal selectEmpInfo(Integer empId) {
+        EmpGroup empGroup = empGroupMapper.selectByEmpId(empId);
+        return empGroup.getEmpAmount().subtract(empGroup.getEmpUsedAmount());
     }
 }
