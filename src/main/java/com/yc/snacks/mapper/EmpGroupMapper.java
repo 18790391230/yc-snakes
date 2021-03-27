@@ -9,4 +9,6 @@ public interface EmpGroupMapper extends MyBatisBaseDao<EmpGroup, Integer> {
     EmpGroup selectByEmpId(int empId);
 
     void updateLoginStatus(int empId);
+
+    void updateUsedAmount(EmpGroup empGroup);
 }
