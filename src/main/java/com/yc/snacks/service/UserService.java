@@ -6,5 +6,7 @@ public interface UserService {
 
     boolean firstLogin(int empId);
 
-    void saveUserTags(List<String> tags);
+    void saveUserTags(int empId, List<Integer> tags);
+
+    void updateLoginStatus(int empId);
 }

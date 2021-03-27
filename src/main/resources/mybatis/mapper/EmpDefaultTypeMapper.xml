@@ -16,7 +16,14 @@
     from yc_emp_default_type
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByEmpId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from yc_emp_default_type
+      where emp_id = #{empId,jdbcType=INTEGER}
+      and type_id =#{tag,jdbcType=INTEGER} limit 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_emp_default_type
     where id = #{id,jdbcType=INTEGER}
   </delete>
