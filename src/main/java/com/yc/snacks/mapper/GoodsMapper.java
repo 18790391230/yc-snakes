@@ -5,10 +5,12 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+
 /**
  * GoodsMapper继承基类
  */
 public interface GoodsMapper extends MyBatisBaseDao<Goods, Integer> {
 
     List<Goods> selectByIdList(@Param("goodsIdList") List<Integer> goodsList);
+    List<Goods> selectByType(Integer goodsType);
 }

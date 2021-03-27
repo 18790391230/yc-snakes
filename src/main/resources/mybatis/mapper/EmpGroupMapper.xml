@@ -156,4 +156,14 @@
       first_login = #{firstLogin,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateLoginStatus">
+    update yc_emp_group
+    set first_login = 1
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </update>
+  <update id="updateUsedAmount">
+    update yc_emp_group
+    set emp_used_amount = #{empUsedAmount,jdbcType=DECIMAL}
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </update>
 </mapper>

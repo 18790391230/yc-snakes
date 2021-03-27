@@ -2,7 +2,7 @@ spring:
   application:
     name: yc-snacks
   datasource:
-    url: jdbc:mysql://8.135.96.3:3307/db_snakes?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&useCompression=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mysql://8.135.96.3:80/db_snacks?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&useCompression=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root

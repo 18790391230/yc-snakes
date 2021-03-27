@@ -20,6 +20,14 @@
     from yc_order
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByGroupId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from yc_order
+    where groupId = #{groupId,jdbcType=INTEGER}
+    and order_status = #{orderStatus,jdbcType=INTEGER}
+    limit 1
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_order
     where id = #{id,jdbcType=INTEGER}
