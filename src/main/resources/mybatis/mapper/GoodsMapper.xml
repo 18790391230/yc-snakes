@@ -18,10 +18,19 @@
     remark, rank_no
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from yc_goods
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByIdList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_goods
+    where id in
+    <foreach collection="goodsIdList" item="id" index="index" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_goods
