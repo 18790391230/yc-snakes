@@ -1,6 +1,7 @@
 package com.yc.snacks.mapper;
 
 import com.yc.snacks.domain.EmpGoods;
+import com.yc.snacks.domain.GoodTypeNameSale;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,9 +19,16 @@ public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
 
     EmpGoods selectByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
 
-    void updateGoodsNum(EmpGoods empGoods);
+    int updateGoodsNum(EmpGoods empGoods);
 
-    void deleteByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
+    int deleteByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
 
-    List<EmpGoods> querySelectedGoods(@Param("empId") Integer empId, @Param("goodsId") List<Integer> goodsIdList);
+    List<EmpGoods> querySelectedGoods(@Param("empId") Integer empId, @Param("goodsIdList") List<Integer> goodsIdList);
+
+    int updateOrderId(@Param("empId") Integer empId, @Param("goodsIdList") List<Integer> goodsIdList,
+                       @Param("orderId") Integer orderId);
+
+    int updateGoodsStatus(@Param("empId") Integer empId, @Param("goodsIdList") List<Integer> goodsIdList, @Param("goodsStatus") int goodsStatus);
+
+    List<GoodTypeNameSale> selectGoodTypeSale();
 }

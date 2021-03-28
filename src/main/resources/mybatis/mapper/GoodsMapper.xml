@@ -29,6 +29,15 @@
     from yc_goods
     where goods_type_id = #{goodsType,jdbcType=INTEGER}
   </select>
+    <select id="selectByGoodsIdList" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from yc_goods
+      where id in
+      <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </select>
   <select id="selectByIdList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

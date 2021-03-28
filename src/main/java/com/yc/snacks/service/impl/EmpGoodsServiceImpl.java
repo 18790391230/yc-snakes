@@ -1,5 +1,6 @@
 package com.yc.snacks.service.impl;
 
+import com.yc.snacks.domain.*;
 import com.yc.snacks.domain.EmpGoods;
 import com.yc.snacks.domain.EmpGroup;
 import com.yc.snacks.domain.Goods;
@@ -83,7 +84,9 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         Map<Integer, List<Goods>> goods2PriceMap = goodsList.stream().collect(Collectors.groupingBy(Goods::getId));
 
         BigDecimal goodsTotal = new BigDecimal(0);
+        int goodsNum = 0;
         for (Map.Entry<Integer, List<EmpGoods>> entry : goods2NumMap.entrySet()) {
+            goodsNum += entry.getValue().get(0).getGoodsNum();
             List<Goods> goods = goods2PriceMap.get(entry.getKey());
             if (goods != null) {
                 BigDecimal bigDecimal = goods.get(0).getGoodsPrice().multiply(new BigDecimal(entry.getValue().get(0).getGoodsNum()));
@@ -105,13 +108,35 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         //查询小组内是否存在已提交但未购买的订单
         Order order = orderMapper.selectByGroupId(empGroup.getGroupId(), 1);
         if (order == null) {
-            order =
+            order = new Order();
+            order.setGoodsNum(goodsNum);
+            order.setGroupId(empGroup.getGroupId());
+            order.setOrderStatus(1);
+            order.setOrderAmount(goodsTotal);
+            orderMapper.insertSelective(order);
+        }else{
+            order.setGoodsNum(order.getGoodsNum() + goodsNum);
+            order.setOrderAmount(order.getOrderAmount().add(goodsTotal));
         }
+        empGoodsMapper.updateOrderId(empId, goodsIdList, order.getId());
+
         //更改购物车状态
+        empGoodsMapper.updateGoodsStatus(empId, goodsIdList, 2);
+    }
 
-//        empGoodsMapper
+    @Override
+    public List<GoodTypeNameSale> queryGoodsHeatRankingList(Integer topCount) {
+        List<GoodTypeNameSale> goodTypeNameSales = empGoodsMapper.selectGoodTypeSale();
+//        List<GoodTypeNameSale> rtnList = new ArrayList<>();
+        for (GoodTypeNameSale goodTypeNameSale : goodTypeNameSales) {
+            List<GoodsSale> goodsSaleList = goodTypeNameSale.getGoodsSaleList();
+            if (!CollectionUtils.isEmpty(goodsSaleList)) {
+                goodTypeNameSale.setGoodsSaleList(goodsSaleList.size() > topCount
+                        ? goodsSaleList.subList(0, topCount)
+                        : goodsSaleList);
+            }
+        }
 
-
-
+        return goodTypeNameSales;
     }
 }
