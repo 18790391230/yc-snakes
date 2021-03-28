@@ -1,7 +1,6 @@
 package com.yc.snacks.web.controller;
 
 import com.yc.snacks.domain.Goods;
-import com.yc.snacks.dto.GroupGoodsListDTO;
 import com.yc.snacks.dto.SelectedGoodsListDTO;
 import com.yc.snacks.model.Response;
 import com.yc.snacks.service.EmpGoodsService;
@@ -9,7 +8,6 @@ import com.yc.snacks.service.GoodsService;
 import com.yc.snacks.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,9 +45,18 @@ public class GoodsController {
         }
     }
 
+    /**
+     *
+     * @param empId
+     * @param orderId
+     * @param status  1表示采购员确认购买  2表示组长确认收货 3表示采购员确认完成
+     * @return
+     */
     @PostMapping("/ensureTakeOver")
     @ResponseBody
-    public Response<Boolean> ensureTakeOver(@PathVariable(name = "empId")Long empId, @PathVariable(name = "flag")Long roleId){
+    public Response<Boolean> ensureTakeOver(@RequestParam(name = "empId")Integer empId, @RequestParam(name = "orderId")Integer orderId,
+                                            @RequestParam(name = "status")Integer status){
+        orderServiceImpl.
         return Response.ok(Boolean.TRUE, null);
     }
 

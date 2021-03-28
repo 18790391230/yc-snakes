@@ -13,4 +13,6 @@ public interface OrderMapper extends MyBatisBaseDao<Order, Integer> {
     Order selectLatestOrderByGroupId(@Param("groupId") Integer groupId);
 
     Order selectByGroupId(@Param("groupId") Integer groupId, @Param("orderStatus") int orderStatus);
+
+    int updateOrderStatus(@Param("orderId") Integer orderId, @Param("status") int orderStatus);
 }

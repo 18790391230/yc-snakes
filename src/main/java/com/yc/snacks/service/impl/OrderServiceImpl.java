@@ -1,7 +1,10 @@
 package com.yc.snacks.service.impl;
 
+import com.yc.snacks.domain.EmpGroup;
 import com.yc.snacks.domain.Order;
+import com.yc.snacks.mapper.EmpGoodsMapper;
 import com.yc.snacks.mapper.OrderMapper;
+import com.yc.snacks.service.EmpGroupService;
 import com.yc.snacks.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private EmpGroupService empGroupServiceImpl;
+
+    @Autowired
+    private EmpGoodsMapper empGoodsMapper;
+
+
 
     @Override
     public Order getCurrentOrderByGroupId(Integer groupId) throws Exception {
@@ -23,5 +34,25 @@ public class OrderServiceImpl implements OrderService {
                 return order;
             }
         }
+        return null;
+    }
+
+    @Override
+    public int updateOrderStatus(Integer orderId, Integer empId, Integer status) throws Exception {
+        EmpGroup empGroup = empGroupServiceImpl.getGroupIdByEmpId(empId);
+        int result = 0;
+        if(empGroup == null){
+            return result;
+        }
+        Integer roleFlag = empGroup.getEmpRoleFlag();
+        if(roleFlag.equals(3) && status.equals(1)){
+            result = orderMapper.updateOrderStatus(orderId, 2);
+            empGoodsMapper.updateGoodsStatus(orderId, 3);
+        }else if(roleFlag.equals(3) && status.equals(3)){
+            result = orderMapper.updateOrderStatus(orderId, 4);
+        }else if(roleFlag.equals(2) && status.equals(2)){
+            result = orderMapper.updateOrderStatus(orderId, 3);
+        }
+        return result;
     }
 }

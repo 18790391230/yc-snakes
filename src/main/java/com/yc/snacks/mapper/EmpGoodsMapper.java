@@ -31,4 +31,6 @@ public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
     List<GoodTypeNameSale> selectGoodTypeSale();
 
     List<EmpGoods> selectByOrderId(@Param("orderId") Integer orderId);
+
+    int updateGoodsStatus(@Param("orderId") Integer orderId, @Param("goodsStatus") Integer goodsStatus);
 }

@@ -5,4 +5,7 @@ import com.yc.snacks.domain.Order;
 public interface OrderService {
 
     Order getCurrentOrderByGroupId(Integer groupId) throws Exception;
+
+    int updateOrderStatus(Integer orderId, Integer empId, Integer status) throws Exception;
+
 }
