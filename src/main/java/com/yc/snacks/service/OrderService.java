@@ -1,6 +1,8 @@
 package com.yc.snacks.service;
 
+import com.yc.snacks.domain.Order;
+
 public interface OrderService {
 
-    public Integer getCurrentOrderIdByGroupId(Integer groupId) throws Exception;
+    Order getCurrentOrderByGroupId(Integer groupId) throws Exception;
 }

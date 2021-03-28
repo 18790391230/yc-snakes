@@ -1,6 +1,8 @@
 package com.yc.snacks.service;
 
+import com.yc.snacks.domain.EmpGroup;
+
 public interface EmpGroupService {
 
-    public Integer getGroupIdByEmpId(Integer empId) throws Exception;
+    EmpGroup getGroupIdByEmpId(Integer empId) throws Exception;
 }

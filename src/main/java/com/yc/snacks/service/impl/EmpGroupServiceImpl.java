@@ -15,10 +15,10 @@ public class EmpGroupServiceImpl implements EmpGroupService {
     public EmpGroupMapper empGroupMapper;
 
     @Override
-    public Integer getGroupIdByEmpId(Integer empId) throws Exception {
+    public EmpGroup getGroupIdByEmpId(Integer empId) throws Exception {
         EmpGroup empGroup = empGroupMapper.selectByEmpId(empId);
         if (!ObjectUtils.isEmpty(empGroup)){
-            return empGroup.getGroupId();
+            return empGroup;
         } else {
             throw new IllegalArgumentException("empId has no matched object");
         }

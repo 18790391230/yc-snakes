@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
 
-    List<EmpGoods> selectByOrderIdAndEmpId(Integer orderId, Integer empId);
+    List<EmpGoods> selectByOrderIdAndEmpId(@Param("orderId") Integer orderId, @Param("empId") Integer empId);
 
-    List<EmpGoods> selectByOrderIdAndNoEmpId(Integer orderId, Integer empId);
+    List<EmpGoods> selectByOrderIdAndNoEmpId(@Param("orderId") Integer orderId, @Param("empId") Integer empId);
 
     EmpGoods selectByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
 
@@ -23,4 +23,6 @@ public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
     void deleteByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
 
     List<EmpGoods> querySelectedGoods(@Param("empId") Integer empId, @Param("goodsId") List<Integer> goodsIdList);
+
+    List<EmpGoods> selectByOrderId(@Param("orderId") Integer orderId);
 }

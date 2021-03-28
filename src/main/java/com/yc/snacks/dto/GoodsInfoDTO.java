@@ -1,5 +1,7 @@
 package com.yc.snacks.dto;
 
+import java.math.BigDecimal;
+
 public class GoodsInfoDTO {
 
     private Integer goodsId;
@@ -10,14 +12,20 @@ public class GoodsInfoDTO {
 
     private Integer goodsNum;
 
+    private String linkId;
+
+    private BigDecimal price;
+
     public GoodsInfoDTO() {
     }
 
-    public GoodsInfoDTO(Integer goodsId, String goodsName, String goodsPicUrl, Integer goodsNum) {
+    public GoodsInfoDTO(Integer goodsId, String goodsName, String goodsPicUrl, Integer goodsNum, String linkId, BigDecimal price) {
         this.goodsId = goodsId;
         this.goodsName = goodsName;
         this.goodsPicUrl = goodsPicUrl;
         this.goodsNum = goodsNum;
+        this.linkId = linkId;
+        this.price = price;
     }
 
     public Integer getGoodsId() {
@@ -50,5 +58,21 @@ public class GoodsInfoDTO {
 
     public void setGoodsNum(Integer goodsNum) {
         this.goodsNum = goodsNum;
+    }
+
+    public String getLinkId() {
+        return linkId;
+    }
+
+    public void setLinkId(String linkId) {
+        this.linkId = linkId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }
