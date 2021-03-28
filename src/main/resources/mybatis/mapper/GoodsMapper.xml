@@ -23,7 +23,7 @@
     from yc_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByType" resultType="com.yc.snacks.domain.Goods">
+  <select id="selectByType" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from yc_goods

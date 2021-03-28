@@ -144,4 +144,11 @@
       order_id = #{orderId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateAmountAndGoodNum">
+    update yc_order
+    set
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      goods_num = #{goodsNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

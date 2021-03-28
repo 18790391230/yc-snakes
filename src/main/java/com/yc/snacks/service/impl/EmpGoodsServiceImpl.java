@@ -153,7 +153,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         //减少额度
         usableAmount = usableAmount.subtract(goodsTotal);
         empGroup.setEmpUsedAmount(empGroup.getEmpAmount().subtract(usableAmount));
-        empGroup.setEmpTotalUsedAmount(empGroup.getEmpTotalUsedAmount().add(empGroup.getEmpUsedAmount()));
+        empGroup.setEmpTotalUsedAmount(empGroup.getEmpTotalUsedAmount().add(goodsTotal));
         empGroupMapper.updateUsedAmount(empGroup);
 
         //查询小组内是否存在已提交但未购买的订单
@@ -169,6 +169,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
             order.setGoodsNum(order.getGoodsNum() + goodsNum);
             order.setOrderAmount(order.getOrderAmount().add(goodsTotal));
         }
+        orderMapper.updateAmountAndGoodNum(order);
         empGoodsMapper.updateOrderId(empId, goodsIdList, order.getId());
 
         //更改购物车状态
