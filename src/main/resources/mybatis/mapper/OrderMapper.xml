@@ -14,6 +14,13 @@
   <sql id="Base_Column_List">
     id, group_id, order_status, order_amount, goods_num, create_time, update_time, order_id
   </sql>
+  <select id="selectLatestOrderByGroupId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_order
+    where group_id = #{groupId,jdbcType=INTEGER}
+    order by create_time desc limit 1
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -32,6 +39,10 @@
     delete from yc_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <update id="updateOrderStatus" parameterType="java.lang.Integer">
+    update yc_order set order_status = #{status,jdbcType=INTEGER}
+    where id = #{orderId,jdbcType=INTEGER}
+  </update>
   <insert id="insert" parameterType="com.yc.snacks.domain.Order">
     insert into yc_order (id, group_id, order_status, 
       order_amount, goods_num, create_time, 

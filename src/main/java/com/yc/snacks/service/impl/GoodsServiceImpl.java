@@ -17,7 +17,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public List<Goods> getGoodsListByIdList(List<Integer> idList) throws Exception {
-        List<Goods> goodsList = goodsMapper.selectByIdList(idList);
+        List<Goods> goodsList = goodsMapper.selectByGoodsIdList(idList);
         if(null == goodsList){
             return new ArrayList<>();
         }
