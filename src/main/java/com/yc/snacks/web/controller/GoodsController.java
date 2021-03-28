@@ -9,10 +9,11 @@ import com.yc.snacks.service.EmpGoodsService;
 import com.yc.snacks.service.GoodsService;
 import com.yc.snacks.service.GroupInfoService;
 import com.yc.snacks.service.OrderService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -28,10 +29,13 @@ public class GoodsController {
     @Autowired
     private GroupInfoService groupInfoServiceImpl;
 
+    @Autowired
+    private GoodsService goodsService;
+
     @GetMapping("/getSelectedGoodsList")
     @ResponseBody
     @ApiOperation(value = "组内商品列表")
-    public Response<List<OrderListDTO>> getSelectedGoodsList(@PathVariable(name = "empId")Integer empId){
+    public Response<List<OrderListDTO>> getSelectedGoodsList(@RequestParam("empId") Integer empId){
         List<OrderListDTO> result = null;
         try{
             result = empGoodsServiceImpl.getSelectedGoodsList(empId);
@@ -73,7 +77,6 @@ public class GoodsController {
     }
 
 
-
     /**
      *
      * @param empId
@@ -83,6 +86,11 @@ public class GoodsController {
      */
     @PostMapping("/ensureTakeOver")
     @ResponseBody
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+            @ApiImplicitParam(name = "orderId", paramType = "form"),
+            @ApiImplicitParam(name = "status", paramType = "form")
+    })
     public Response<Boolean> ensureTakeOver(@RequestParam(name = "empId")Integer empId, @RequestParam(name = "orderId")Integer orderId,
                                             @RequestParam(name = "status")Integer status){
 
@@ -98,8 +106,6 @@ public class GoodsController {
         }
     }
 
-    @Autowired
-    private GoodsService goodsService;
 
     @ApiOperation(value = "根据类型查询商品列表")
     @GetMapping("selectByType")
