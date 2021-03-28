@@ -49,6 +49,8 @@ public class EmpGroup implements Serializable {
      */
     private Date createTime;
 
+    private BigDecimal empTotalUsedAmount;
+
     /**
      * 更新时间
      */
@@ -58,6 +60,14 @@ public class EmpGroup implements Serializable {
      * 是否第一次登陆
      */
     private Integer firstLogin;
+
+    public BigDecimal getEmpTotalUsedAmount() {
+        return empTotalUsedAmount;
+    }
+
+    public void setEmpTotalUsedAmount(BigDecimal empTotalUsedAmount) {
+        this.empTotalUsedAmount = empTotalUsedAmount;
+    }
 
     private static final long serialVersionUID = 1L;
 

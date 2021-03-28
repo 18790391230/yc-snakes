@@ -13,9 +13,19 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="first_login" jdbcType="INTEGER" property="firstLogin" />
   </resultMap>
+
+  <resultMap id="EmpGoodsExpenseResultMap" type="com.yc.snacks.domain.EmpGoodsExpenseInfo">
+    <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="workplace_name" jdbcType="VARCHAR" property="workplaceName" />
+    <result column="emp_id" jdbcType="INTEGER" property="empId" />
+    <result column="emp_role_flag" jdbcType="INTEGER" property="empRoleFlag" />
+    <result column="emp_amount" jdbcType="DECIMAL" property="empAmount" />
+    <result column="emp_used_amount" jdbcType="DECIMAL" property="empUsedAmount" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, group_id, emp_name, emp_id, emp_role_flag, emp_amount, emp_used_amount, create_time, 
-    update_time, first_login
+    update_time, first_login, emp_total_used_amount
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -28,6 +38,9 @@
       <include refid="Base_Column_List" />
       from yc_emp_group
       where emp_id = #{empId,jdbcType=INTEGER}
+    </select>
+    <select id="selectEmpGoodsExpenseInfo" resultType="com.yc.snacks.domain.EmpGoodsExpenseInfo">
+        select * from yc_emp_group
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_emp_group
@@ -161,9 +174,11 @@
     set first_login = 1
     where emp_id = #{empId,jdbcType=INTEGER}
   </update>
+
   <update id="updateUsedAmount">
     update yc_emp_group
-    set emp_used_amount = #{empUsedAmount,jdbcType=DECIMAL}
+    set emp_used_amount = #{empUsedAmount,jdbcType=DECIMAL},
+    emp_total_used_amount = #{empTotalUsedAmount,jdbcType=DECIMAL}
     where emp_id = #{empId,jdbcType=INTEGER}
   </update>
 </mapper>

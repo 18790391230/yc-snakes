@@ -151,6 +151,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         //减少额度
         usableAmount = usableAmount.subtract(goodsTotal);
         empGroup.setEmpUsedAmount(empGroup.getEmpAmount().subtract(usableAmount));
+        empGroup.setEmpTotalUsedAmount(empGroup.getEmpTotalUsedAmount().add(empGroup.getEmpUsedAmount()));
         empGroupMapper.updateUsedAmount(empGroup);
 
         //查询小组内是否存在已提交但未购买的订单
