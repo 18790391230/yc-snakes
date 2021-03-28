@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
         Integer roleFlag = empGroup.getEmpRoleFlag();
         if(roleFlag.equals(3) && status.equals(1)){
             result = orderMapper.updateOrderStatus(orderId, 2);
-            empGoodsMapper.updateGoodsStatus(orderId, 3);
+            empGoodsMapper.updateGoodsStatusByOrderId(orderId, 3);
         }else if(roleFlag.equals(3) && status.equals(3)){
             result = orderMapper.updateOrderStatus(orderId, 4);
         }else if(roleFlag.equals(2) && status.equals(2)){
