@@ -56,8 +56,17 @@ public class GoodsController {
     @ResponseBody
     public Response<Boolean> ensureTakeOver(@RequestParam(name = "empId")Integer empId, @RequestParam(name = "orderId")Integer orderId,
                                             @RequestParam(name = "status")Integer status){
-        orderServiceImpl.
-        return Response.ok(Boolean.TRUE, null);
+
+        try{
+            int updateDatas = orderServiceImpl.updateOrderStatus(orderId, empId, status);
+            if(updateDatas > 0){
+                return Response.ok(Boolean.TRUE, null);
+            }else{
+                return Response.error(Boolean.FALSE);
+            }
+        }catch (Exception e){
+            return Response.error(e, Boolean.FALSE);
+        }
     }
 
     @Autowired
