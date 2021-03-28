@@ -2,6 +2,7 @@ package com.yc.snacks.service.impl;
 
 import com.yc.snacks.domain.*;
 import com.yc.snacks.dto.GoodsInfoDTO;
+import com.yc.snacks.dto.OrderListDTO;
 import com.yc.snacks.dto.SelectedGoodsListDTO;
 import com.yc.snacks.mapper.EmpGoodsMapper;
 import com.yc.snacks.mapper.EmpGroupMapper;
@@ -48,50 +49,58 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
     private GoodsMapper goodsMapper;
 
     @Override
-    public SelectedGoodsListDTO getSelectedGoodsList(Integer empId) throws Exception {
-        SelectedGoodsListDTO result = new SelectedGoodsListDTO();
+    public List<OrderListDTO> getSelectedGoodsList(Integer empId) throws Exception {
+        List<OrderListDTO> result = new ArrayList<>();
         try {
             EmpGroup empGroup = empGroupService.getGroupIdByEmpId(empId);
             if(empGroup != null){
                 Integer groupId = empGroup.getGroupId();
-                Order order = orderServiceImpl.getCurrentOrderByGroupId(groupId);
-                Integer orderId = order.getId();
+                List<Order> orderList = orderServiceImpl.getUnCompletedOrdersByGroupId(groupId);
+//                List<Integer> orderIdList = orderList.stream().map(Order::getId).collect(Collectors.toList());
                 List<Integer> goodsIdList = new ArrayList<>();
-                List<EmpGoods> ownerList = empGoodsMapper.selectByOrderIdAndEmpId(orderId, empId);
-                goodsIdList.addAll(ownerList.stream().map(EmpGoods::getGoodsId).collect(Collectors.toList()));
-                List<EmpGoods> otherList = empGoodsMapper.selectByOrderIdAndNoEmpId(orderId, empId);
-                goodsIdList.addAll(otherList.stream().map(EmpGoods::getGoodsId).collect(Collectors.toList()));
-                if (goodsIdList.size() > 0) {
-                    List<Goods> goodsList = goodsServiceImpl.getGoodsListByIdList(goodsIdList);
-                    Map<Integer, Goods> goodsMap = goodsList.stream().collect(Collectors.toMap(Goods::getId, goods-> goods));
-                    List<GoodsInfoDTO> owner = new ArrayList<>();
-                    List<GoodsInfoDTO> other = new ArrayList<>();
-                    for(EmpGoods empGoods : ownerList){
-                        Integer goodsId = empGoods.getGoodsId();
-                        Integer goodsNum = empGoods.getGoodsNum();
-                        Goods goods = goodsMap.get(goodsId);
-                        String goodsName = goods.getName();
-                        String goodsPic = goods.getPicUrl();
-                        String linkId = goods.getLinkId();
-                        BigDecimal price = goods.getGoodsPrice();
-                        GoodsInfoDTO dto = new GoodsInfoDTO(goodsId, goodsName, goodsPic, goodsNum, linkId, price);
-                        owner.add(dto);
+                for(Order order : orderList){
+                    OrderListDTO dto = new OrderListDTO();
+                    Integer orderId = order.getId();
+                    List<EmpGoods> ownerList = empGoodsMapper.selectByOrderIdAndEmpId(orderId, empId);
+                    goodsIdList.addAll(ownerList.stream().map(EmpGoods::getGoodsId).collect(Collectors.toList()));
+                    List<EmpGoods> otherList = empGoodsMapper.selectByOrderIdAndNoEmpId(orderId, empId);
+                    goodsIdList.addAll(otherList.stream().map(EmpGoods::getGoodsId).collect(Collectors.toList()));
+                    if (goodsIdList.size() > 0) {
+                        List<Goods> goodsList = goodsServiceImpl.getGoodsListByIdList(goodsIdList);
+                        Map<Integer, Goods> goodsMap = goodsList.stream().collect(Collectors.toMap(Goods::getId, goods-> goods));
+                        List<GoodsInfoDTO> owner = new ArrayList<>();
+                        List<GoodsInfoDTO> other = new ArrayList<>();
+                        for(EmpGoods empGoods : ownerList){
+                            Integer goodsId = empGoods.getGoodsId();
+                            Integer goodsNum = empGoods.getGoodsNum();
+                            Goods goods = goodsMap.get(goodsId);
+                            String goodsName = goods.getName();
+                            String goodsPic = goods.getPicUrl();
+                            String linkId = goods.getLinkId();
+                            BigDecimal price = goods.getGoodsPrice();
+                            GoodsInfoDTO dto1 = new GoodsInfoDTO(goodsId, goodsName, goodsPic, goodsNum, linkId, price);
+                            owner.add(dto1);
+                        }
+                        for(EmpGoods empGoods : otherList){
+                            Integer goodsId = empGoods.getGoodsId();
+                            Integer goodsNum = empGoods.getGoodsNum();
+                            Goods goods = goodsMap.get(goodsId);
+                            String goodsName = goods.getName();
+                            String goodsPic = goods.getPicUrl();
+                            String linkId = goods.getLinkId();
+                            BigDecimal price = goods.getGoodsPrice();
+                            GoodsInfoDTO dto2 = new GoodsInfoDTO(goodsId, goodsName, goodsPic, goodsNum, linkId, price);
+                            other.add(dto2);
+                        }
+                        dto.setGroupId(groupId);
+                        dto.setOrderId(orderId);
+                        dto.setGoodsAmount(order.getOrderAmount());
+                        dto.setGoodsNum(order.getGoodsNum());
+                        dto.setOtherList(other);
+                        dto.setOtherList(owner);
+                        result.add(dto);
                     }
-                    for(EmpGoods empGoods : otherList){
-                        Integer goodsId = empGoods.getGoodsId();
-                        Integer goodsNum = empGoods.getGoodsNum();
-                        Goods goods = goodsMap.get(goodsId);
-                        String goodsName = goods.getName();
-                        String goodsPic = goods.getPicUrl();
-                        String linkId = goods.getLinkId();
-                        BigDecimal price = goods.getGoodsPrice();
-                        GoodsInfoDTO dto = new GoodsInfoDTO(goodsId, goodsName, goodsPic, goodsNum, linkId, price);
-                        other.add(dto);
-                    }
-                    result.setGroupId(groupId);
-                    result.setOrderId(orderId);
-                    result.setOwnerList(owner);
-                    result.setOwnerList(other);
+
                 }
             }
         }catch (Exception e){
@@ -191,9 +200,9 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
 
 
     @Override
-    public SelectedGoodsListDTO getGoodsByGroupId(Integer groupId) throws Exception {
+    public SelectedGoodsListDTO getGoodsByGroupId(Integer groupId, Integer payStatus) throws Exception {
         SelectedGoodsListDTO result = new SelectedGoodsListDTO();
-        Order order = orderServiceImpl.getCurrentOrderByGroupId(groupId);
+        Order order = orderServiceImpl.getCurrentOrderByGroupIdAndStatus(groupId, payStatus);
         if(null == order){
             return null;
         }

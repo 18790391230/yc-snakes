@@ -21,6 +21,20 @@
     where group_id = #{groupId,jdbcType=INTEGER}
     order by create_time desc limit 1
   </select>
+  <select id="selectLatestOrderByGroupIdAndStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_order
+    where group_id = #{groupId,jdbcType=INTEGER} and order_status = #{status,jdbcType=INTEGER}
+    order by create_time desc limit 1
+  </select>
+  <select id="selectUnCompletedOrdersByGroupId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_order
+    where group_id = #{groupId,jdbcType=INTEGER}
+    and order_status != 4
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

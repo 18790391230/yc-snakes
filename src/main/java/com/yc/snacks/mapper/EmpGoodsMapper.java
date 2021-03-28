@@ -15,6 +15,10 @@ public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
 
     List<EmpGoods> selectByOrderIdAndNoEmpId(@Param("orderId") Integer orderId, @Param("empId") Integer empId);
 
+    List<EmpGoods> selectByOrderIdsAndEmpId(@Param("orderIdList") List<Integer> orderIdList, @Param("empId") Integer empId);
+
+    List<EmpGoods> selectByOrderIdsAndNoEmpId(@Param("orderIdList") List<Integer> orderIdList, @Param("empId") Integer empId);
+
     EmpGoods selectByGoodsId(@Param("empId") Integer empId, @Param("goodsId") Integer goodsId);
 
     int updateGoodsNum(EmpGoods empGoods);
@@ -33,4 +37,6 @@ public interface EmpGoodsMapper extends MyBatisBaseDao<EmpGoods, Integer> {
     List<EmpGoods> selectByOrderId(@Param("orderId") Integer orderId);
 
     int updateGoodsStatusByOrderId(@Param("orderId") Integer orderId, @Param("goodsStatus") Integer goodsStatus);
+
+    List<EmpGoods> selectAll();
 }

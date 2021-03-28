@@ -9,6 +9,8 @@ import com.yc.snacks.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -38,6 +40,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order getCurrentOrderByGroupIdAndStatus(Integer groupId, Integer status) throws Exception {
+        Order order = orderMapper.selectLatestOrderByGroupIdAndStatus(groupId, status);
+        if(status.equals(2)){
+            if(order == null){
+                order = orderMapper.selectLatestOrderByGroupIdAndStatus(groupId, 3);
+                if(order == null){
+                    orderMapper.selectLatestOrderByGroupIdAndStatus(groupId, 4);
+                }
+            }
+        }
+        return order;
+    }
+
+    @Override
     public int updateOrderStatus(Integer orderId, Integer empId, Integer status) throws Exception {
         EmpGroup empGroup = empGroupServiceImpl.getGroupIdByEmpId(empId);
         int result = 0;
@@ -54,5 +70,11 @@ public class OrderServiceImpl implements OrderService {
             result = orderMapper.updateOrderStatus(orderId, 3);
         }
         return result;
+    }
+
+    @Override
+    public List<Order> getUnCompletedOrdersByGroupId(Integer groupId) throws Exception {
+        List<Order> orderList = orderMapper.selectUnCompletedOrdersByGroupId(groupId);
+        return orderList;
     }
 }

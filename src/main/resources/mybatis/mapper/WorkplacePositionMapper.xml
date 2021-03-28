@@ -14,6 +14,14 @@
     from yc_position
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByIdList" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from yc_position where id in
+    <foreach collection="idList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_position
     where id = #{id,jdbcType=INTEGER}

@@ -1,10 +1,13 @@
 package com.yc.snacks.web.controller;
 
 import com.yc.snacks.domain.Goods;
+import com.yc.snacks.dto.GroupInfoDTO;
+import com.yc.snacks.dto.OrderListDTO;
 import com.yc.snacks.dto.SelectedGoodsListDTO;
 import com.yc.snacks.model.Response;
 import com.yc.snacks.service.EmpGoodsService;
 import com.yc.snacks.service.GoodsService;
+import com.yc.snacks.service.GroupInfoService;
 import com.yc.snacks.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,14 @@ public class GoodsController {
     @Autowired
     private OrderService orderServiceImpl;
 
+    @Autowired
+    private GroupInfoService groupInfoServiceImpl;
+
     @GetMapping("/getSelectedGoodsList")
     @ResponseBody
-    public Response<SelectedGoodsListDTO> getSelectedGoodsList(@PathVariable(name = "empId")Integer empId){
-        SelectedGoodsListDTO result = null;
+    @ApiOperation(value = "组内商品列表")
+    public Response<List<OrderListDTO>> getSelectedGoodsList(@PathVariable(name = "empId")Integer empId){
+        List<OrderListDTO> result = null;
         try{
             result = empGoodsServiceImpl.getSelectedGoodsList(empId);
         }catch (Exception e){
@@ -34,16 +41,38 @@ public class GoodsController {
         return Response.ok(result, null);
     }
 
+    /**
+     *
+     * @param groupId
+     * @param payStatus  1未结算  2已结算
+     * @return
+     */
     @GetMapping("/getGroupGoodsList")
     @ResponseBody
-    public Response<SelectedGoodsListDTO> getGroupGoodsList(@PathVariable(name = "groupId")Integer groupId){
+    @ApiOperation(value = "采购详情列表（每组商品列表）")
+    public Response<SelectedGoodsListDTO> getGroupGoodsList(@PathVariable(name = "groupId")Integer groupId,
+                                                            @PathVariable(name = "payStatus")Integer payStatus){
         try{
-            SelectedGoodsListDTO dto = empGoodsServiceImpl.getGoodsByGroupId(groupId);
+            SelectedGoodsListDTO dto = empGoodsServiceImpl.getGoodsByGroupId(groupId, payStatus);
             return Response.ok(dto, null);
         }catch (Exception e){
             return Response.error(e, null);
         }
     }
+
+    @GetMapping("/getGroupList")
+    @ResponseBody
+    @ApiOperation(value = "采购详情列表（每组商品列表）")
+    public Response<List<GroupInfoDTO>> getGroupInfoList(){
+        try{
+            List<GroupInfoDTO> result = groupInfoServiceImpl.getGroupInfoList();
+            return Response.ok(result, null);
+        }catch (Exception e){
+            return Response.error(e, null);
+        }
+    }
+
+
 
     /**
      *

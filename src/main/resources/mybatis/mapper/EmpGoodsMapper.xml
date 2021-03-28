@@ -28,6 +28,13 @@
     from yc_emp_goods
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_emp_goods
+  </select>
+
   <select id="selectByOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -70,6 +77,27 @@
       #{item}
     </foreach>
     and goods_status=1
+  </select>
+
+  <select id="selectByOrderIdsAndEmpId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_emp_goods
+    where order_id in
+    <foreach collection="orderIdList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+    and emp_id = #{empId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByOrderIdsAndNoEmpId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from yc_emp_goods
+    where order_id in
+    <foreach collection="orderIdList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+    and emp_id != #{empId,jdbcType=INTEGER}
   </select>
 
   <select id="selectGoodTypeSale" resultMap="CustomResultMap">
