@@ -14,6 +14,7 @@ import com.yc.snacks.service.GoodsService;
 import com.yc.snacks.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -129,6 +130,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
 
     }
 
+    @Transactional
     @Override
     public void submitGoodsShopping(Integer empId, List<Integer> goodsIdList) {
         //校验是否超额
@@ -160,7 +162,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
         //减少额度
         usableAmount = usableAmount.subtract(goodsTotal);
         empGroup.setEmpUsedAmount(empGroup.getEmpAmount().subtract(usableAmount));
-        empGroup.setEmpTotalUsedAmount(empGroup.getEmpTotalUsedAmount().add(empGroup.getEmpUsedAmount()));
+        empGroup.setEmpTotalUsedAmount(empGroup.getEmpTotalUsedAmount().add(goodsTotal));
         empGroupMapper.updateUsedAmount(empGroup);
 
         //查询小组内是否存在已提交但未购买的订单
@@ -176,6 +178,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
             order.setGoodsNum(order.getGoodsNum() + goodsNum);
             order.setOrderAmount(order.getOrderAmount().add(goodsTotal));
         }
+        orderMapper.updateAmountAndGoodNum(order);
         empGoodsMapper.updateOrderId(empId, goodsIdList, order.getId());
 
         //更改购物车状态

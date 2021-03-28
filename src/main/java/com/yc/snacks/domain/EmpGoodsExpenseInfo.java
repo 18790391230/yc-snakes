@@ -4,9 +4,70 @@ import java.math.BigDecimal;
 
 public class EmpGoodsExpenseInfo {
 
+    private String companyName;
+    private String departmentName;
     private String workplaceName;
 
     private String groupName;
+
+    private BigDecimal yearBudgetAmount;
+
+    private Double usedRate;
+
+
+    /**
+     * 员工名称
+     */
+    private String empName;
+
+    /**
+     * 员工id
+     */
+    private Integer empId;
+
+
+    /**
+     * 员工当月额度
+     */
+    private BigDecimal empAmount;
+
+    /**
+     * 员工已用额度
+     */
+    private BigDecimal empUsedAmount;
+
+    private BigDecimal empTotalUsedAmount;
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public BigDecimal getYearBudgetAmount() {
+        return yearBudgetAmount;
+    }
+
+    public void setYearBudgetAmount(BigDecimal yearBudgetAmount) {
+        this.yearBudgetAmount = yearBudgetAmount;
+    }
+
+    public Double getUsedRate() {
+        return usedRate;
+    }
+
+    public void setUsedRate(Double usedRate) {
+        this.usedRate = usedRate;
+    }
 
     public String getWorkplaceName() {
         return workplaceName;
@@ -24,33 +85,6 @@ public class EmpGoodsExpenseInfo {
         this.groupName = groupName;
     }
 
-    /**
-     * 员工名称
-     */
-    private String empName;
-
-    /**
-     * 员工id
-     */
-    private Integer empId;
-
-    /**
-     * 员工角色，1普通角色  2团队负责人  3采购员
-     */
-    private Integer empRoleFlag;
-
-    /**
-     * 员工当月额度
-     */
-    private BigDecimal empAmount;
-
-    /**
-     * 员工已用额度
-     */
-    private BigDecimal empUsedAmount;
-
-    private BigDecimal empTotalUsedAmount;
-
 
     public String getEmpName() {
         return empName;
@@ -66,14 +100,6 @@ public class EmpGoodsExpenseInfo {
 
     public void setEmpId(Integer empId) {
         this.empId = empId;
-    }
-
-    public Integer getEmpRoleFlag() {
-        return empRoleFlag;
-    }
-
-    public void setEmpRoleFlag(Integer empRoleFlag) {
-        this.empRoleFlag = empRoleFlag;
     }
 
     public BigDecimal getEmpAmount() {

@@ -45,7 +45,7 @@
     select
     <include refid="Base_Column_List"/>
     from yc_order
-    where groupId = #{groupId,jdbcType=INTEGER}
+    where group_id = #{groupId,jdbcType=INTEGER}
     and order_status = #{orderStatus,jdbcType=INTEGER}
     limit 1
   </select>
@@ -156,6 +156,13 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       order_id = #{orderId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateAmountAndGoodNum">
+    update yc_order
+    set
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      goods_num = #{goodsNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -9,17 +9,18 @@
     <result column="emp_role_flag" jdbcType="INTEGER" property="empRoleFlag" />
     <result column="emp_amount" jdbcType="DECIMAL" property="empAmount" />
     <result column="emp_used_amount" jdbcType="DECIMAL" property="empUsedAmount" />
+    <result column="emp_total_used_amount" jdbcType="DECIMAL" property="empTotalUsedAmount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="first_login" jdbcType="INTEGER" property="firstLogin" />
   </resultMap>
 
   <resultMap id="EmpGoodsExpenseResultMap" type="com.yc.snacks.domain.EmpGoodsExpenseInfo">
+    <result column="emp_total_used_amount" jdbcType="DECIMAL" property="empTotalUsedAmount" />
     <result column="emp_name" jdbcType="VARCHAR" property="empName" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
-    <result column="workplace_name" jdbcType="VARCHAR" property="workplaceName" />
+    <result column="workplaceName" jdbcType="VARCHAR" property="workplaceName" />
     <result column="emp_id" jdbcType="INTEGER" property="empId" />
-    <result column="emp_role_flag" jdbcType="INTEGER" property="empRoleFlag" />
     <result column="emp_amount" jdbcType="DECIMAL" property="empAmount" />
     <result column="emp_used_amount" jdbcType="DECIMAL" property="empUsedAmount" />
   </resultMap>
@@ -41,7 +42,7 @@
     </select>
     <select id="selectEmpGoodsExpenseInfo" resultMap="EmpGoodsExpenseResultMap">
         SELECT
-      t1.`name` worksplace_name, t2.`name` group_name, t3.*
+      t1.`name` workplaceName, t2.`name` group_name, t3.*
       FROM yc_position t1 inner join yc_group t2 on t1.id = t2.position_id
       inner join yc_emp_group t3 on t2.id=t3.group_id
     </select>

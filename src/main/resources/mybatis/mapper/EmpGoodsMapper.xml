@@ -67,7 +67,7 @@
     update yc_emp_goods set goods_status = #{goodsStatus,jdbcType=INTEGER}
     where order_id = #{orderId,jdbcType=INTEGER}
   </update>
-  <select id="querySelectedGoods" resultType="com.yc.snacks.domain.EmpGoods">
+  <select id="querySelectedGoods" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from yc_emp_goods
@@ -230,7 +230,7 @@
       #{item}
     </foreach>
   </update>
-  <update id="updateGoodsStatus">
+    <update id="updateGoodsStatus">
     update yc_emp_goods
     set goods_status = #{goodsStatus,jdbcType=INTEGER}
     where emp_id = #{empId,jdbcType=INTEGER}

@@ -8,6 +8,8 @@ import com.yc.snacks.domain.EmpGroup;
 import com.yc.snacks.model.Response;
 import com.yc.snacks.service.EmpGroupService;
 import com.yc.snacks.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("user")
@@ -31,77 +34,43 @@ public class UserController {
     @Autowired
     private EmpGroupService empGroupService;
 
-    private static class User{
-        private String name;
-        private String age;
-        private String birthday;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getAge() {
-            return age;
-        }
-
-        public void setAge(String age) {
-            this.age = age;
-        }
-
-        public String getBirthday() {
-            return birthday;
-        }
-
-        public void setBirthday(String birthday) {
-            this.birthday = birthday;
-        }
-    }
-
+    @ApiOperation("导出零食实际支出汇总")
     @GetMapping("exportEmpGoodsExpenseInfo")
-    public void exportEmpGoodsExpenseInfo(ServletRequest request, HttpServletResponse response) {
+    public void exportEmpGoodsExpenseInfo(HttpServletResponse response) {
         List<EmpGoodsExpenseInfo> empGoodsExpenseInfos = empGroupService.selectEmpGoodsExpenseInfo();
 
-        List<User> list = new ArrayList<>();
-        User obj = new User();
-        obj.setName("卡卡罗特");
-        obj.setAge("25");
-        obj.setBirthday("0903");
-        list.add(obj);
-        list.add(new User());
-// 通过工具类创建writer，默认创建xls格式
-        ExcelWriter writer = ExcelUtil.getWriter();
-//自定义标题别名
-        writer.addHeaderAlias("name", "姓名");
-        writer.addHeaderAlias("age", "年龄");
-        writer.addHeaderAlias("birthDay", "生日");
-// 合并单元格后的标题行，使用默认标题样式
-        writer.merge(2, "申请人员信息");
-        writer.write(list, true);
-        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        String name = "test";
-        response.setHeader("Content-Disposition","attachment;filename="+name+".xls");
-        ServletOutputStream out= null;
-        try {
-
-            out = response.getOutputStream();
-
-            writer.flush(out, true);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }finally {
-
-            writer.close();
+        for (EmpGoodsExpenseInfo empGoodsExpenseInfo : empGoodsExpenseInfos) {
+            empGoodsExpenseInfo.setCompanyName("招银云创");
+            empGoodsExpenseInfo.setDepartmentName("数据团队");
+            BigDecimal bigDecimal = new BigDecimal(200 * 12);
+            empGoodsExpenseInfo.setUsedRate(empGoodsExpenseInfo.getEmpTotalUsedAmount().divide(bigDecimal).doubleValue());
+            empGoodsExpenseInfo.setYearBudgetAmount(bigDecimal);
 
         }
+        ExcelWriter writer = ExcelUtil.getWriter();
+        writer.setOnlyAlias(true);
+        writer.addHeaderAlias("companyName", "公司");
+        writer.addHeaderAlias("departmentName", "部门");
+        writer.addHeaderAlias("groupName", "组别");
+        writer.addHeaderAlias("workplaceName", "职场");
+        writer.addHeaderAlias("empName", "姓名");
+        writer.addHeaderAlias("empId", "员工编号");
+        writer.addHeaderAlias("empAmount", "当期费用金额");
+        writer.addHeaderAlias("empTotalUsedAmount", "本年累计费用");
+        writer.addHeaderAlias("yearBudgetAmount", "本年预算金额");
+        writer.addHeaderAlias("usedRate", "预算完成度");
 
-        IoUtil.close(out);
+        writer.write(empGoodsExpenseInfos, true);
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        String yyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        response.setHeader("Content-Disposition","attachment;filename="+yyyyMMddHHmmss+".xls");
+        try (ServletOutputStream out = response.getOutputStream()){
+            writer.flush(out, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            writer.close();
+        }
 
     }
 
@@ -114,6 +83,10 @@ public class UserController {
 
     @ApiOperation(value = "保存用户感兴趣的商品类型")
     @PostMapping("saveUserTags")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+            @ApiImplicitParam(name = "goodsTypeIds", paramType = "form"),
+    })
     public Response<Void> saveUserTags(@RequestParam("empId") int empId, @RequestParam("goodsTypeIds") List<Integer> goodsTypeIds) {
         userService.saveUserTags(empId, goodsTypeIds);
         return Response.ok(null, null);
@@ -121,6 +94,9 @@ public class UserController {
 
     @ApiOperation(value = "更新用户状态为：不是第一次登陆")
     @PostMapping("updateLoginStatus")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+    })
     public Response<Void> updateLoginStatus(@RequestParam("empId") Integer empId) {
         userService.updateLoginStatus(empId);
         return Response.ok(null, null);
@@ -128,6 +104,9 @@ public class UserController {
 
     @ApiOperation(value = "查询用户周期内可用额度")
     @PostMapping("queryEmpUsableAmount")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+    })
     public Response<BigDecimal> queryEmpUsableAmount(@RequestParam("empId") Integer empId) {
         return Response.ok(userService.selectEmpInfo(empId), null);
     }
