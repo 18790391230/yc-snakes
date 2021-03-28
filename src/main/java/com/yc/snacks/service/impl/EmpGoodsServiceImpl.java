@@ -13,6 +13,7 @@ import com.yc.snacks.service.GoodsService;
 import com.yc.snacks.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -120,6 +121,7 @@ public class EmpGoodsServiceImpl implements EmpGoodsService {
 
     }
 
+    @Transactional
     @Override
     public void submitGoodsShopping(Integer empId, List<Integer> goodsIdList) {
         //校验是否超额

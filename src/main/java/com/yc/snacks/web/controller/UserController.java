@@ -8,6 +8,8 @@ import com.yc.snacks.domain.EmpGroup;
 import com.yc.snacks.model.Response;
 import com.yc.snacks.service.EmpGroupService;
 import com.yc.snacks.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +83,10 @@ public class UserController {
 
     @ApiOperation(value = "保存用户感兴趣的商品类型")
     @PostMapping("saveUserTags")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+            @ApiImplicitParam(name = "goodsTypeIds", paramType = "form"),
+    })
     public Response<Void> saveUserTags(@RequestParam("empId") int empId, @RequestParam("goodsTypeIds") List<Integer> goodsTypeIds) {
         userService.saveUserTags(empId, goodsTypeIds);
         return Response.ok(null, null);
@@ -88,6 +94,9 @@ public class UserController {
 
     @ApiOperation(value = "更新用户状态为：不是第一次登陆")
     @PostMapping("updateLoginStatus")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+    })
     public Response<Void> updateLoginStatus(@RequestParam("empId") Integer empId) {
         userService.updateLoginStatus(empId);
         return Response.ok(null, null);
@@ -95,6 +104,9 @@ public class UserController {
 
     @ApiOperation(value = "查询用户周期内可用额度")
     @PostMapping("queryEmpUsableAmount")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "empId", paramType = "form"),
+    })
     public Response<BigDecimal> queryEmpUsableAmount(@RequestParam("empId") Integer empId) {
         return Response.ok(userService.selectEmpInfo(empId), null);
     }

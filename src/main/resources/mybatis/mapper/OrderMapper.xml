@@ -31,7 +31,7 @@
     select
     <include refid="Base_Column_List"/>
     from yc_order
-    where groupId = #{groupId,jdbcType=INTEGER}
+    where group_id = #{groupId,jdbcType=INTEGER}
     and order_status = #{orderStatus,jdbcType=INTEGER}
     limit 1
   </select>
