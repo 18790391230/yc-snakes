@@ -10,6 +10,15 @@
     <result column="goods_status" jdbcType="INTEGER" property="goodsStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+
+  <resultMap id="CustomResultMap" type="com.yc.snacks.domain.GoodTypeNameSale">
+    <result column="goods_type_name" jdbcType="VARCHAR" property="goodsTypeName" />
+    <collection property="goodsSaleList" ofType="com.yc.snacks.domain.GoodsSale">
+      <result column="good_name" jdbcType="VARCHAR" property="goodsName" />
+      <result column="cnt" jdbcType="INTEGER" property="count" />
+    </collection>
+
+  </resultMap>
   <sql id="Base_Column_List">
     id, order_id, emp_id, goods_id, goods_num, goods_status, create_time
   </sql>
@@ -28,13 +37,40 @@
     and goods_id=#{goodsId,jdbcType=INTEGER}
     and goods_status=1
   </select>
+  <select id="querySelectedGoods" resultType="com.yc.snacks.domain.EmpGoods">
+    select
+    <include refid="Base_Column_List"/>
+    from yc_emp_goods
+    where emp_id = #{empId,jdbcType=INTEGER}
+    and goods_id in
+    <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+    and goods_status=1
+  </select>
+
+  <select id="selectGoodTypeSale" resultMap="CustomResultMap">
+      SELECT
+      t1.goods_type_name,
+      t2.`name` good_name,
+      count( * ) cnt
+  FROM
+      yc_goods_type t1
+      INNER JOIN yc_goods t2 ON t1.id = t2.goods_type_id
+      INNER JOIN yc_emp_goods t3 ON t2.id = t3.goods_id
+      AND t3.goods_status = 3
+  GROUP BY
+      t1.goods_type_name, good_name order by t1.goods_type_name, cnt desc
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_emp_goods
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByGoodsId">
-
+    delete from yc_emp_goods
+    where emp_id=#{empId,jdbcType=INTEGER}
+    and goods_id = #{goodsId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yc.snacks.domain.EmpGoods">
     insert into yc_emp_goods (id, order_id, emp_id, 
@@ -134,4 +170,23 @@
     and goods_id=#{goodsId,jdbcType=INTEGER}
     and goods_status=1
   </update>
+  <update id="updateOrderId">
+    update yc_emp_goods
+    set order_id = #{orderId}
+    where emp_id = #{empId,jdbcType=INTEGER}
+    and goods_id in
+    <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  <update id="updateGoodsStatus">
+    update yc_emp_goods
+    set goods_status = #{goodsStatus,jdbcType=INTEGER}
+    where emp_id = #{empId,jdbcType=INTEGER}
+    and goods_id in
+    <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
 </mapper>

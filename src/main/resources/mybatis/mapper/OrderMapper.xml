@@ -40,7 +40,7 @@
       #{orderAmount,jdbcType=DECIMAL}, #{goodsNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{orderId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yc.snacks.domain.Order">
+  <insert id="insertSelective" parameterType="com.yc.snacks.domain.Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into yc_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

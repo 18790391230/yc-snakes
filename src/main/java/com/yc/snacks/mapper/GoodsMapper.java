@@ -13,4 +13,6 @@ public interface GoodsMapper extends MyBatisBaseDao<Goods, Integer> {
 
     List<Goods> selectByIdList(@Param("goodsIdList") List<Integer> goodsList);
     List<Goods> selectByType(Integer goodsType);
+
+    List<Goods> selectByGoodsIdList(@Param("goodsIdList") List<Integer> goodsIdList);
 }
