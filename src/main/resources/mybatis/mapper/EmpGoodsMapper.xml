@@ -202,14 +202,14 @@
       #{item}
     </foreach>
   </update>
-  <update id="updateGoodsStatus">
-    update yc_emp_goods
-    set goods_status = #{goodsStatus,jdbcType=INTEGER}
-    where emp_id = #{empId,jdbcType=INTEGER}
-    and goods_id in
-    <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
-      #{item}
-    </foreach>
-  </update>
+<!--  <update id="updateGoodsStatus">-->
+<!--    update yc_emp_goods-->
+<!--    set goods_status = #{goodsStatus,jdbcType=INTEGER}-->
+<!--    where emp_id = #{empId,jdbcType=INTEGER}-->
+<!--    and goods_id in-->
+<!--    <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">-->
+<!--      #{item}-->
+<!--    </foreach>-->
+<!--  </update>-->
 
 </mapper>
