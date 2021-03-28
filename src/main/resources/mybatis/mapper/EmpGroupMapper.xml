@@ -39,8 +39,11 @@
       from yc_emp_group
       where emp_id = #{empId,jdbcType=INTEGER}
     </select>
-    <select id="selectEmpGoodsExpenseInfo" resultType="com.yc.snacks.domain.EmpGoodsExpenseInfo">
-        select * from yc_emp_group
+    <select id="selectEmpGoodsExpenseInfo" resultMap="EmpGoodsExpenseResultMap">
+        SELECT
+      t1.`name` worksplace_name, t2.`name` group_name, t3.*
+      FROM yc_position t1 inner join yc_group t2 on t1.id = t2.position_id
+      inner join yc_emp_group t3 on t2.id=t3.group_id
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yc_emp_group

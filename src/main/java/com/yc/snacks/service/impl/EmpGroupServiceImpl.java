@@ -1,5 +1,6 @@
 package com.yc.snacks.service.impl;
 
+import com.yc.snacks.domain.EmpGoodsExpenseInfo;
 import com.yc.snacks.domain.EmpGroup;
 import com.yc.snacks.mapper.EmpGroupMapper;
 import com.yc.snacks.service.EmpGroupService;
@@ -7,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 @Service
 public class EmpGroupServiceImpl implements EmpGroupService {
@@ -22,5 +25,10 @@ public class EmpGroupServiceImpl implements EmpGroupService {
         } else {
             throw new IllegalArgumentException("empId has no matched object");
         }
+    }
+
+    @Override
+    public List<EmpGoodsExpenseInfo> selectEmpGoodsExpenseInfo() {
+        return empGroupMapper.selectEmpGoodsExpenseInfo();
     }
 }
